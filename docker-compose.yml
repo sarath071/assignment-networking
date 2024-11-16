@@ -1,0 +1,20 @@
+version: '3'
+services:
+  terraform:
+    image: hashicorp/terraform:light
+    volumes:
+      - ./terraform:/workspace
+    working_dir: /workspace
+    entrypoint: ["terraform", "apply", "-auto-approve"]
+
+  ansible:
+    image: williamyeh/ansible:alpine3
+    volumes:
+      - ./ansible:/workspace
+    working_dir: /workspace
+    entrypoint: ["ansible-playbook", "-i", "inventory", "playbook.yml"]
+
+  flask-app:
+    build: ./docker
+    ports:
+      - "8000:8000"
